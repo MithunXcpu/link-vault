@@ -10,6 +10,8 @@ export type LinkCategory =
   | "My Projects"
   | "Claude Skills & Plugins";
 
+export type LinkScope = "work" | "personal";
+
 export interface LinkEntry {
   id: string;
   type: "tweet" | "github";
@@ -17,6 +19,7 @@ export interface LinkEntry {
   title: string;
   summary: string;
   category: LinkCategory;
+  scope: LinkScope;
   useCase: string;
   appIdea: string;
   hasGithub?: boolean;
@@ -36,6 +39,7 @@ export const links: LinkEntry[] = [
     summary:
       "AniStudio showcasing their AI-powered animation and video generation tool that creates studio-quality animated content from text prompts.",
     category: "Creative & Media",
+    scope: "work",
     useCase:
       "Automate product demo videos, social media content, and explainer animations without a design team.",
     appIdea:
@@ -49,6 +53,7 @@ export const links: LinkEntry[] = [
     summary:
       "Security researcher who curates awesome-claude-skills and shares offensive/defensive security tooling for AI agents.",
     category: "Security & Privacy",
+    scope: "work",
     useCase:
       "Stay updated on Claude Code security skills, vulnerability patterns, and AI-assisted pentesting techniques.",
     appIdea:
@@ -64,6 +69,7 @@ export const links: LinkEntry[] = [
     summary:
       "Voxyz demonstrating realistic AI voice synthesis technology for content creation and accessibility.",
     category: "Creative & Media",
+    scope: "work",
     useCase:
       "Generate voiceovers for videos, podcasts, and apps without recording sessions. Localize content into multiple languages instantly.",
     appIdea:
@@ -77,6 +83,7 @@ export const links: LinkEntry[] = [
     summary:
       "Tech commentary on the state of AI tools, workflows, and how builders are shipping faster with AI-native development.",
     category: "Productivity",
+    scope: "work",
     useCase:
       "Identify emerging AI workflow patterns that solo developers are using to compete with larger teams.",
     appIdea:
@@ -90,6 +97,7 @@ export const links: LinkEntry[] = [
     summary:
       "Long-form article on X discussing AI agent architectures, multi-agent systems, or emerging AI development patterns.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Deep-dive research on how multi-agent systems are being deployed in production by real companies.",
     appIdea:
@@ -103,6 +111,7 @@ export const links: LinkEntry[] = [
     summary:
       "Robert Scoble's curated Twitter lists covering AR/VR, AI, autonomous vehicles, and frontier tech leaders.",
     category: "Productivity",
+    scope: "work",
     useCase:
       "Curate signal from noise — follow specific tech verticals through expert-curated lists instead of the algorithmic feed.",
     appIdea:
@@ -116,6 +125,7 @@ export const links: LinkEntry[] = [
     summary:
       "Cloud architecture tips, AWS/GCP patterns, and infrastructure automation insights for developers.",
     category: "Developer Tools",
+    scope: "work",
     useCase:
       "Learn production-grade cloud patterns — serverless, edge functions, cost optimization, and IaC best practices.",
     appIdea:
@@ -133,6 +143,7 @@ export const links: LinkEntry[] = [
     summary:
       "JavaScript class for a 3D avatar that speaks with real-time lip sync in the browser. Supports full-body animations and multiple languages.",
     category: "Creative & Media",
+    scope: "work",
     useCase:
       "Add a talking AI assistant to any website — customer support, onboarding guides, or interactive tutorials with a human-like presence.",
     appIdea:
@@ -146,6 +157,7 @@ export const links: LinkEntry[] = [
     summary:
       "AI-powered data science platform with specialized agents and a visual 'AI Pipeline Studio' for data loading, cleaning, visualization, and modeling.",
     category: "Data & Analytics",
+    scope: "work",
     useCase:
       "Let non-technical team members run data analysis by chatting with AI agents instead of writing Python/SQL.",
     appIdea:
@@ -159,6 +171,7 @@ export const links: LinkEntry[] = [
     summary:
       "Web interface that runs Claude Code sessions in your browser by connecting to the CLI via WebSocket.",
     category: "Developer Tools",
+    scope: "work",
     useCase:
       "Run Claude Code from any device with a browser — iPad, phone, Chromebook — without a local terminal.",
     appIdea:
@@ -172,6 +185,7 @@ export const links: LinkEntry[] = [
     summary:
       "Tool for visually annotating and reviewing AI coding agent plans, with approve/reject and structured feedback flows.",
     category: "Developer Tools",
+    scope: "work",
     useCase:
       "Add human oversight to AI coding workflows — review what the agent plans to do before it touches your codebase.",
     appIdea:
@@ -185,6 +199,7 @@ export const links: LinkEntry[] = [
     summary:
       "CLI tool that installs ready-made components — AI agents, custom commands, integrations — to enhance Claude Code workflows.",
     category: "Developer Tools",
+    scope: "work",
     useCase:
       "Jumpstart Claude Code setups with pre-built agent configs, CLAUDE.md templates, and skill packages.",
     appIdea:
@@ -198,6 +213,7 @@ export const links: LinkEntry[] = [
     summary:
       "Personal AI assistant delivering core agent functionality in ~4,000 lines of code — 99% smaller than comparable systems.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Deploy a capable AI agent on resource-constrained devices — Raspberry Pi, old laptops, edge servers.",
     appIdea:
@@ -211,6 +227,7 @@ export const links: LinkEntry[] = [
     summary:
       "Open-source framework for organizing reusable AI prompts ('Patterns') into everyday workflows. Crowdsourced prompt library.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Build a personal library of battle-tested AI prompts that plug into any tool — CLI, scripts, or agents.",
     appIdea:
@@ -224,6 +241,7 @@ export const links: LinkEntry[] = [
     summary:
       "Fully open-source, end-to-end encrypted platform for cloud storage. Google Photos alternative + 2FA authenticator app.",
     category: "Security & Privacy",
+    scope: "work",
     useCase:
       "Replace Google Photos with a privacy-first alternative. Self-host or use their cloud. Your photos, your encryption keys.",
     appIdea:
@@ -237,6 +255,7 @@ export const links: LinkEntry[] = [
     summary:
       "Modern open-source alternative to Salesforce. Community-powered CRM built with TypeScript, React, and NestJS.",
     category: "CRM & Business",
+    scope: "work",
     useCase:
       "Self-host a full CRM without Salesforce pricing. Customize pipelines, integrations, and automations to your exact workflow.",
     appIdea:
@@ -250,6 +269,7 @@ export const links: LinkEntry[] = [
     summary:
       "Rust-based tool that verifies if an email address exists without actually sending an email. HTTP backend included.",
     category: "CRM & Business",
+    scope: "work",
     useCase:
       "Clean your email lists before campaigns — reduce bounce rates, protect sender reputation, save on email platform costs.",
     appIdea:
@@ -263,6 +283,7 @@ export const links: LinkEntry[] = [
     summary:
       "Python library that extracts structured information from unstructured text using LLMs with source grounding and interactive visualization.",
     category: "Data & Analytics",
+    scope: "work",
     useCase:
       "Parse contracts, clinical notes, legal documents, or support tickets into structured, queryable data automatically.",
     appIdea:
@@ -276,6 +297,7 @@ export const links: LinkEntry[] = [
     summary:
       "Memory agent that provides persistent context across AI coding tools. Classifies user preferences, decisions, and goals. Integrates with GitHub, Linear, Slack.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Give your AI assistant long-term memory — it remembers your coding style, project decisions, and preferences across sessions.",
     appIdea:
@@ -289,6 +311,7 @@ export const links: LinkEntry[] = [
     summary:
       "Web UI for managing Claude Code sessions in GNU Screen. Persistent sessions, auto-respawn, real-time monitoring, multi-session dashboards.",
     category: "Developer Tools",
+    scope: "work",
     useCase:
       "Run multiple Claude Code agents in parallel on long tasks — monitor all sessions from one dashboard, auto-restart on failures.",
     appIdea:
@@ -302,6 +325,7 @@ export const links: LinkEntry[] = [
     summary:
       "Plugin that schedules automated Claude Code tasks — code reviews, security audits, and more — running autonomously on a schedule.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Set up nightly code reviews, weekly security scans, and daily dependency checks — all running while you sleep.",
     appIdea:
@@ -315,6 +339,7 @@ export const links: LinkEntry[] = [
     summary:
       "Marketplace of 73 plugins bundling 112 AI agents, 146 skills, and 79 tools for Claude Code. Modular, single-purpose, token-efficient.",
     category: "Claude Skills & Plugins",
+    scope: "work",
     useCase:
       "Cherry-pick exactly the skills you need instead of loading bloated plugin packs. Each plugin is focused and lightweight.",
     appIdea:
@@ -328,6 +353,7 @@ export const links: LinkEntry[] = [
     summary:
       "TypeScript bot that executes arbitrage trades on Polymarket prediction markets. Monitors price discrepancies, auto-executes with risk management.",
     category: "Finance & Trading",
+    scope: "work",
     useCase:
       "Automated prediction market trading — exploit price inefficiencies between oracle feeds and the order book.",
     appIdea:
@@ -341,6 +367,7 @@ export const links: LinkEntry[] = [
     summary:
       "Zero-code multi-agent platform where AI agents role-play as CEO, CTO, programmer, and tester to build software through conversation.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Simulate an entire dev team — describe what you want built and watch agents collaborate to produce working code.",
     appIdea:
@@ -354,6 +381,7 @@ export const links: LinkEntry[] = [
     summary:
       "Curated collection of Claude Code skills including invoice organizer, meeting insights, content research, file organizer, image enhancer, and video downloader.",
     category: "Claude Skills & Plugins",
+    scope: "work",
     useCase:
       "Browse and install community-built skills that extend Claude Code with document processing, media handling, and workflow automation.",
     appIdea:
@@ -367,6 +395,7 @@ export const links: LinkEntry[] = [
     summary:
       "Official Anthropic skills for Word, Excel, PowerPoint, PDF processing, frontend design, web app testing, and internal communications.",
     category: "Claude Skills & Plugins",
+    scope: "work",
     useCase:
       "Generate and edit business documents (DOCX, XLSX, PPTX, PDF) directly from Claude Code. Build and test web frontends.",
     appIdea:
@@ -380,6 +409,7 @@ export const links: LinkEntry[] = [
     summary:
       "Essential skills library: TDD, systematic debugging, brainstorming, code review, parallel agents, git worktrees, defense-in-depth.",
     category: "Claude Skills & Plugins",
+    scope: "work",
     useCase:
       "Level up Claude Code with battle-tested development patterns — debug systematically, write tests first, review code thoroughly.",
     appIdea:
@@ -393,6 +423,7 @@ export const links: LinkEntry[] = [
     summary:
       "Claude Code skill for searching X/Twitter in real-time. Find dev discussions, product feedback, breaking news, expert opinions.",
     category: "Claude Skills & Plugins",
+    scope: "work",
     useCase:
       "Research what developers and users are saying about any topic on X — competitive intel, sentiment analysis, trend spotting.",
     appIdea:
@@ -406,6 +437,7 @@ export const links: LinkEntry[] = [
     summary:
       "Official Anthropic educational courses covering real-world prompting, prompt engineering techniques, and best practices.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Learn structured prompt engineering from the source — Anthropic's own training materials for getting the most out of Claude.",
     appIdea:
@@ -419,6 +451,7 @@ export const links: LinkEntry[] = [
     summary:
       "Security-focused Claude Code skills from Trail of Bits: CodeQL, Semgrep, variant analysis, smart contract auditing, property-based testing.",
     category: "Security & Privacy",
+    scope: "work",
     useCase:
       "Automate security reviews with industry-standard static analysis tools. Find vulnerabilities before they ship.",
     appIdea:
@@ -432,6 +465,7 @@ export const links: LinkEntry[] = [
     summary:
       "Generates publication-quality methodology diagrams and statistical plots from text descriptions for research papers.",
     category: "Data & Analytics",
+    scope: "work",
     useCase:
       "Auto-generate figures for research papers — methodology flowcharts, statistical plots, architecture diagrams — from plain text descriptions.",
     appIdea:
@@ -445,6 +479,7 @@ export const links: LinkEntry[] = [
     summary:
       "Curated resources for OpenClaw — orchestrating AI agents across multiple machines for distributed computing.",
     category: "AI Agents & Automation",
+    scope: "work",
     useCase:
       "Distribute AI workloads across multiple Macs or servers — run parallel agents on separate machines for massive speedups.",
     appIdea:
@@ -462,6 +497,7 @@ export const links: LinkEntry[] = [
     summary:
       "Personal portfolio and blog with automated content pipeline. GitHub Actions pulls podcast transcripts, generates derivative blog posts, auto-tweets.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Automated content marketing — zero-touch blog generation from podcast transcripts with social media distribution.",
     appIdea:
@@ -475,6 +511,7 @@ export const links: LinkEntry[] = [
     summary:
       "Platform for building and deploying small AI-powered tools quickly. Describe what you need, get a working micro-tool.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Rapid prototyping of single-purpose AI tools — calculators, converters, analyzers — without setting up full projects.",
     appIdea:
@@ -488,6 +525,7 @@ export const links: LinkEntry[] = [
     summary:
       "Upload a screenshot of any UI or tool, and AI reverse-engineers it into a working web application.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Clone any tool's UI from a screenshot — rapid competitive analysis, prototyping, or rebuilding legacy interfaces.",
     appIdea:
@@ -501,6 +539,7 @@ export const links: LinkEntry[] = [
     summary:
       "Retro diner-themed bill splitting app. Split bills instantly at brunch, lunch, or dinner with friends.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Solve the awkward 'who owes what' problem at group meals with a fun, themed interface.",
     appIdea:
@@ -514,6 +553,7 @@ export const links: LinkEntry[] = [
     summary:
       "Hiring pipeline management tool for tracking candidates through interview stages with structured feedback.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Organize hiring workflows — track candidates, schedule interviews, collect feedback, make data-driven hiring decisions.",
     appIdea:
@@ -527,6 +567,7 @@ export const links: LinkEntry[] = [
     summary:
       "AI-powered call intelligence platform that analyzes sales/support calls for insights, action items, and coaching opportunities.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Transform every call into structured data — auto-extract action items, sentiment, objections, and next steps.",
     appIdea:
@@ -540,6 +581,7 @@ export const links: LinkEntry[] = [
     summary:
       "Environmental, Social, and Governance scoring platform that evaluates companies on sustainability metrics.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Help investors and companies track ESG compliance, identify risks, and benchmark against industry standards.",
     appIdea:
@@ -553,6 +595,7 @@ export const links: LinkEntry[] = [
     summary:
       "ROI modeling tool that helps businesses calculate the value and return on investment of products or services.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Sales enablement — give prospects a customized ROI calculation to justify purchase decisions.",
     appIdea:
@@ -566,6 +609,7 @@ export const links: LinkEntry[] = [
     summary:
       "Tax compliance dashboard for managing tax obligations, filings, and regulatory requirements.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Centralize tax compliance tracking — deadlines, filings, jurisdictions, and audit readiness in one view.",
     appIdea:
@@ -579,6 +623,7 @@ export const links: LinkEntry[] = [
     summary:
       "Tool for detecting and analyzing buyer intent signals from web behavior, content engagement, and digital footprints.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Identify which website visitors are ready to buy based on their behavior patterns — prioritize sales outreach accordingly.",
     appIdea:
@@ -592,6 +637,7 @@ export const links: LinkEntry[] = [
     summary:
       "Lightweight, no-bloat CRM for freelancers and small teams who don't need Salesforce complexity.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Simple contact and deal tracking for solopreneurs — no training required, no feature bloat.",
     appIdea:
@@ -605,6 +651,7 @@ export const links: LinkEntry[] = [
     summary:
       "Multi-agent orchestration system where specialized AI agents collaborate on complex tasks.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Decompose complex projects into parallel agent workflows — each agent specializes in one domain, a supervisor coordinates.",
     appIdea:
@@ -618,6 +665,7 @@ export const links: LinkEntry[] = [
     summary:
       "Autonomous AI agent that takes Product Requirements Documents and executes them as working software.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Write a PRD, hand it to Ralph, get working code. Bridges the gap between product thinking and engineering execution.",
     appIdea:
@@ -631,6 +679,7 @@ export const links: LinkEntry[] = [
     summary:
       "Aggregates and displays MLB baseball news, scores, and updates in a clean interface.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Niche content aggregation — pull from multiple sources, deduplicate, and present a unified sports news feed.",
     appIdea:
@@ -644,6 +693,7 @@ export const links: LinkEntry[] = [
     summary:
       "Track job applications through stages — applied, phone screen, interview, offer — with notes and follow-up reminders.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Organize your job search — never lose track of where you applied, what stage you're at, or when to follow up.",
     appIdea:
@@ -657,6 +707,7 @@ export const links: LinkEntry[] = [
     summary:
       "Display and interact with code on a TV screen — optimized for large displays and living room coding sessions.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Code reviews and pair programming on a big screen — great for team sessions, presentations, or just vibing while coding on the couch.",
     appIdea:
@@ -670,6 +721,7 @@ export const links: LinkEntry[] = [
     summary:
       "A themed Valentine's Day web experience — likely an interactive card, quiz, or romantic gesture generator.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Seasonal/event-driven micro-apps — quick, themed experiences that go viral during holidays.",
     appIdea:
@@ -683,6 +735,7 @@ export const links: LinkEntry[] = [
     summary:
       "Curated collection of psychology references, research papers, and mental models for decision-making.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Quick access to psychological frameworks — cognitive biases, persuasion principles, behavioral economics — for product design and marketing.",
     appIdea:
@@ -696,6 +749,7 @@ export const links: LinkEntry[] = [
     summary:
       "Demo of a government transparency and civic data platform showing budget data, spending, and community metrics.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Make government spending data accessible and understandable for citizens through visualizations and plain-English summaries.",
     appIdea:
@@ -709,6 +763,7 @@ export const links: LinkEntry[] = [
     summary:
       "Tool for building personal software tools — custom utilities tailored to your specific workflow needs.",
     category: "My Projects",
+    scope: "personal",
     useCase:
       "Empower non-developers to describe and generate custom tools that solve their unique workflow problems.",
     appIdea:

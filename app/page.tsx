@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { links, type LinkEntry, type LinkCategory } from "./data";
+import { links, type LinkEntry, type LinkCategory, type LinkScope } from "./data";
 
 const categories: LinkCategory[] = [
   "AI Agents & Automation",
@@ -73,11 +73,22 @@ function LinkCard({ entry }: { entry: LinkEntry }) {
             {entry.title}
           </h3>
         </div>
-        <span
-          className={`shrink-0 text-[11px] font-medium px-2 py-0.5 rounded-full border ${categoryColors[entry.category]}`}
-        >
-          {entry.category}
-        </span>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span
+            className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full border ${
+              entry.scope === "work"
+                ? "bg-blue-50 text-blue-600 border-blue-200"
+                : "bg-emerald-50 text-emerald-600 border-emerald-200"
+            }`}
+          >
+            {entry.scope === "work" ? "🏢" : "🧑"}
+          </span>
+          <span
+            className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${categoryColors[entry.category]}`}
+          >
+            {entry.category}
+          </span>
+        </div>
       </div>
 
       {/* Summary */}
@@ -227,6 +238,7 @@ export default function Home() {
     "all"
   );
   const [activeType, setActiveType] = useState<TypeFilter>("all");
+  const [activeScope, setActiveScope] = useState<LinkScope | "all">("all");
 
   const filtered = useMemo(() => {
     return links.filter((link) => {
@@ -242,9 +254,11 @@ export default function Home() {
 
       const matchesType = activeType === "all" || link.type === activeType;
 
-      return matchesSearch && matchesCategory && matchesType;
+      const matchesScope = activeScope === "all" || link.scope === activeScope;
+
+      return matchesSearch && matchesCategory && matchesType && matchesScope;
     });
-  }, [search, activeCategory, activeType]);
+  }, [search, activeCategory, activeType, activeScope]);
 
   const stats = useMemo(
     () => ({
@@ -381,6 +395,39 @@ export default function Home() {
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border border-border rounded-xl bg-surface text-sm placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all"
             />
+          </div>
+
+          {/* Scope toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted mr-1">Scope:</span>
+            {(["all", "work", "personal"] as const).map((scope) => {
+              const scopeCount =
+                scope === "all"
+                  ? links.length
+                  : links.filter((l) => l.scope === scope).length;
+              return (
+                <button
+                  key={scope}
+                  onClick={() => setActiveScope(scope)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-all ${
+                    activeScope === scope
+                      ? scope === "work"
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : scope === "personal"
+                          ? "bg-emerald-600 text-white border-emerald-600"
+                          : "bg-foreground text-background border-foreground"
+                      : "bg-white text-muted border-border hover:border-foreground/20"
+                  }`}
+                >
+                  {scope === "all"
+                    ? "All"
+                    : scope === "work"
+                      ? "🏢 Work"
+                      : "🧑 Personal"}
+                  <span className="opacity-60 ml-1">{scopeCount}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Type filter */}
