@@ -271,6 +271,24 @@ interface StagedEntry {
   createdAt: number;
 }
 
+function detectType(url: string): LinkType {
+  if (url.includes("x.com") || url.includes("twitter.com")) return "tweet";
+  if (url.includes("github.com")) return "github";
+  return "article";
+}
+
+function guessCategory(url: string, title: string, description: string): LinkCategory {
+  const text = `${url} ${title} ${description}`.toLowerCase();
+  if (text.includes("security") || text.includes("pentest") || text.includes("vulnerability") || text.includes("privacy")) return "Security & Privacy";
+  if (text.includes("agent") || text.includes("automat") || text.includes("ai agent") || text.includes("llm") || text.includes("openai") || text.includes("claude") || text.includes("gpt")) return "AI Agents & Automation";
+  if (text.includes("crm") || text.includes("sales") || text.includes("business") || text.includes("marketing")) return "CRM & Business";
+  if (text.includes("data") || text.includes("analytics") || text.includes("chart") || text.includes("dashboard")) return "Data & Analytics";
+  if (text.includes("video") || text.includes("image") || text.includes("design") || text.includes("creative") || text.includes("media")) return "Creative & Media";
+  if (text.includes("finance") || text.includes("trading") || text.includes("stock") || text.includes("crypto")) return "Finance & Trading";
+  if (text.includes("productivity") || text.includes("workflow") || text.includes("notion") || text.includes("todoist")) return "Productivity";
+  return "Developer Tools";
+}
+
 function QuickAddModal({
   onClose,
   onAdd,
@@ -278,49 +296,71 @@ function QuickAddModal({
   onClose: () => void;
   onAdd: (entry: StagedEntry) => void;
 }) {
-  const [form, setForm] = useState<Omit<StagedEntry, "id" | "createdAt">>({
-    title: "",
-    url: "",
-    type: "github",
-    category: "Developer Tools",
-    scope: "work",
-    summary: "",
-    useCase: "",
-    appIdea: "",
-    tags: "",
-  });
-  const [copied, setCopied] = useState(false);
+  const [url, setUrl] = useState("");
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [fetched, setFetched] = useState<{
+    title: string;
+    description: string;
+    siteName: string;
+    keywords: string;
+  } | null>(null);
+  const [error, setError] = useState("");
 
-  const tsOutput = useMemo(() => {
-    const tagsArr = form.tags
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-    const tagStr = tagsArr.length > 0 ? `\n    tags: [${tagsArr.map((t) => `"${t}"`).join(", ")}],` : "";
-    return `{
-    id: "new-${Date.now()}",
-    type: "${form.type}",
-    url: "${form.url}",
-    title: "${form.title}",
-    summary: "${form.summary}",
-    category: "${form.category}",
-    scope: "${form.scope}",
-    useCase: "${form.useCase}",
-    appIdea: "${form.appIdea}",${tagStr}
-  },`;
-  }, [form]);
+  const handlePaste = useCallback(async (pastedUrl: string) => {
+    if (!pastedUrl.startsWith("http")) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/fetch-meta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: pastedUrl }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setFetched(data);
+        if (!name) setName(data.title || "");
+      }
+    } catch {
+      setError("Could not fetch page info");
+    } finally {
+      setLoading(false);
+    }
+  }, [name]);
 
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(tsOutput);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [tsOutput]);
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setUrl(val);
+    // Auto-fetch on paste (when value changes significantly)
+    if (val.startsWith("http") && val.length > 10 && val !== url) {
+      handlePaste(val);
+    }
+  };
 
-  const handleSubmit = () => {
-    if (!form.title || !form.url) return;
+  const handleSave = () => {
+    if (!url) return;
+    const type = detectType(url);
+    const title = name || fetched?.title || url;
+    const description = fetched?.description || "";
+    const category = guessCategory(url, title, description);
+    const tags = fetched?.keywords
+      ? fetched.keywords.split(",").map((t) => t.trim()).filter(Boolean).slice(0, 5).join(", ")
+      : "";
+
     onAdd({
-      ...form,
       id: `staged-${Date.now()}`,
+      title,
+      url,
+      type,
+      category,
+      scope: "work",
+      summary: description || `Saved from ${fetched?.siteName || new URL(url).hostname}`,
+      useCase: "",
+      appIdea: "",
+      tags,
       createdAt: Date.now(),
     });
     onClose();
@@ -332,11 +372,11 @@ function QuickAddModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-5 border-b border-border">
-          <h2 className="text-lg font-bold">Quick Add Link</h2>
+          <h2 className="text-lg font-bold">Add Link</h2>
           <button onClick={onClose} className="text-muted hover:text-foreground transition-colors">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -345,122 +385,83 @@ function QuickAddModal({
         </div>
 
         <div className="p-5 space-y-4">
-          {/* Title + URL */}
-          <div className="grid grid-cols-1 gap-3">
-            <input
-              type="text"
-              placeholder="Title"
-              value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full px-3 py-2 border border-border rounded-lg bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-            />
+          {/* URL */}
+          <div>
+            <label className="text-xs font-medium text-muted mb-1 block">Paste URL</label>
             <input
               type="url"
-              placeholder="URL"
-              value={form.url}
-              onChange={(e) => setForm({ ...form, url: e.target.value })}
-              className="w-full px-3 py-2 border border-border rounded-lg bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
+              placeholder="https://..."
+              value={url}
+              onChange={handleUrlChange}
+              autoFocus
+              className="w-full px-3 py-2.5 border border-border rounded-lg bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
             />
           </div>
 
-          {/* Type + Category + Scope */}
-          <div className="grid grid-cols-3 gap-3">
-            <select
-              value={form.type}
-              onChange={(e) => setForm({ ...form, type: e.target.value as LinkType })}
-              className="px-3 py-2 border border-border rounded-lg bg-surface text-sm"
-            >
-              {typeFilters.map((t) => (
-                <option key={t} value={t}>{typeLabels[t]}</option>
-              ))}
-            </select>
-            <select
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value as LinkCategory })}
-              className="px-3 py-2 border border-border rounded-lg bg-surface text-sm"
-            >
-              {categories.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-            <select
-              value={form.scope}
-              onChange={(e) => setForm({ ...form, scope: e.target.value as LinkScope })}
-              className="px-3 py-2 border border-border rounded-lg bg-surface text-sm"
-            >
-              <option value="work">Work</option>
-              <option value="personal">Personal</option>
-            </select>
-          </div>
-
-          {/* Summary */}
-          <textarea
-            placeholder="Summary"
-            value={form.summary}
-            onChange={(e) => setForm({ ...form, summary: e.target.value })}
-            rows={2}
-            className="w-full px-3 py-2 border border-border rounded-lg bg-surface text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-          />
-
-          {/* Use Case + App Idea */}
-          <textarea
-            placeholder="Use case"
-            value={form.useCase}
-            onChange={(e) => setForm({ ...form, useCase: e.target.value })}
-            rows={2}
-            className="w-full px-3 py-2 border border-border rounded-lg bg-surface text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-          />
-          <textarea
-            placeholder="App idea"
-            value={form.appIdea}
-            onChange={(e) => setForm({ ...form, appIdea: e.target.value })}
-            rows={2}
-            className="w-full px-3 py-2 border border-border rounded-lg bg-surface text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-          />
-
-          {/* Tags */}
-          <input
-            type="text"
-            placeholder="Tags (comma-separated)"
-            value={form.tags}
-            onChange={(e) => setForm({ ...form, tags: e.target.value })}
-            className="w-full px-3 py-2 border border-border rounded-lg bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-          />
-
-          {/* Generated TypeScript */}
+          {/* Name (optional) */}
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted">
-                Generated TypeScript
-              </span>
-              <button
-                onClick={handleCopy}
-                className="text-[11px] font-medium text-accent hover:text-accent/80 transition-colors"
-              >
-                {copied ? "Copied!" : "Copy"}
-              </button>
-            </div>
-            <pre className="text-[11px] bg-surface border border-border rounded-lg p-3 overflow-x-auto font-mono text-foreground/70 leading-relaxed">
-              {tsOutput}
-            </pre>
+            <label className="text-xs font-medium text-muted mb-1 block">Name <span className="text-muted/50">(optional)</span></label>
+            <input
+              type="text"
+              placeholder={fetched?.title || "Auto-detected from page"}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-3 py-2.5 border border-border rounded-lg bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
+            />
           </div>
 
-          {/* Actions */}
-          <div className="flex gap-3">
-            <button
-              onClick={handleSubmit}
-              disabled={!form.title || !form.url}
-              className="flex-1 py-2.5 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Stage Entry
-            </button>
-            <button
-              onClick={handleCopy}
-              className="px-4 py-2.5 border border-border text-sm font-medium rounded-lg hover:bg-surface transition-colors"
-            >
-              Copy Only
-            </button>
-          </div>
+          {/* Status / Preview */}
+          {loading && (
+            <div className="flex items-center gap-2 text-xs text-muted">
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Fetching page info...
+            </div>
+          )}
+
+          {error && (
+            <div className="text-xs text-red-500 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+              {error} — link will still be saved with URL info only.
+            </div>
+          )}
+
+          {fetched && !loading && (
+            <div className="bg-surface border border-border rounded-lg p-3 space-y-1">
+              <div className="flex items-center gap-2">
+                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
+                  detectType(url) === "tweet" ? "bg-blue-100 text-blue-700" :
+                  detectType(url) === "github" ? "bg-gray-100 text-gray-700" :
+                  "bg-amber-100 text-amber-700"
+                }`}>
+                  {detectType(url)}
+                </span>
+                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full border ${
+                  categoryColors[guessCategory(url, name || fetched.title, fetched.description)]
+                }`}>
+                  {guessCategory(url, name || fetched.title, fetched.description)}
+                </span>
+                {fetched.siteName && (
+                  <span className="text-[10px] text-muted">{fetched.siteName}</span>
+                )}
+              </div>
+              {fetched.description && (
+                <p className="text-[12px] text-muted leading-relaxed line-clamp-2">
+                  {fetched.description}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Save button */}
+          <button
+            onClick={handleSave}
+            disabled={!url || loading}
+            className="w-full py-2.5 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {loading ? "Fetching..." : "Save Link"}
+          </button>
         </div>
       </div>
     </div>
@@ -788,6 +789,33 @@ export default function Home() {
 
         {/* Cards Grid */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+          {/* Staged entries first */}
+          {stagedEntries
+            .filter((se) => {
+              const searchLower = search.toLowerCase();
+              const matchesSearch = search === "" || se.title.toLowerCase().includes(searchLower) || se.url.toLowerCase().includes(searchLower) || se.summary.toLowerCase().includes(searchLower);
+              const matchesCategory = activeCategory === "all" || se.category === activeCategory;
+              const matchesType = activeType === "all" || se.type === activeType;
+              const matchesScope = activeScope === "all" || se.scope === activeScope;
+              return matchesSearch && matchesCategory && matchesType && matchesScope;
+            })
+            .map((se) => (
+              <LinkCard
+                key={se.id}
+                entry={{
+                  id: se.id,
+                  type: se.type,
+                  url: se.url,
+                  title: se.title,
+                  summary: se.summary,
+                  category: se.category,
+                  scope: se.scope,
+                  useCase: se.useCase || "Saved via Quick Add",
+                  appIdea: se.appIdea || "",
+                  tags: se.tags ? se.tags.split(",").map((t) => t.trim()).filter(Boolean) : undefined,
+                }}
+              />
+            ))}
           {filtered.map((entry) => (
             <LinkCard key={entry.id} entry={entry} />
           ))}

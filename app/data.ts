@@ -1204,4 +1204,32 @@ export const links: LinkEntry[] = [
     tags: ["product-photography", "ai-images", "ads", "e-commerce"],
     location: "~/.claude/skills/product-ads/",
   },
+  {
+    id: "skill-15",
+    type: "skill",
+    url: "https://github.com/browser-use/macOS-use",
+    title: "mac-automation",
+    summary:
+      "Remote Mac fleet control — start/stop Ollama, health-check all machines, pull models, run commands via SSH. Companion to multi-machine-setup guide.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Manage Ollama across multiple Macs without SSH'ing manually. Fleet health monitoring.",
+    appIdea: "Auto-scaling AI inference: detect idle Macs, auto-start Ollama, route requests to least-loaded machine.",
+    tags: ["mac-automation", "ollama", "ssh", "fleet-management", "multi-machine"],
+    location: "~/.claude/skills/mac-automation/",
+  },
+  {
+    id: "skill-16",
+    type: "skill",
+    url: "https://github.com/HKUDS/AutoAgent",
+    title: "auto-agent",
+    summary:
+      "Generate Claude Code agent teams from natural language. Describe a workflow → get agent .md files with roles, tools, model selection, and orchestration patterns.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Instantly spin up specialized agent teams instead of writing .md files by hand.",
+    appIdea: "Visual agent designer: drag-and-drop UI that previews agent topology before generating files.",
+    tags: ["auto-agent", "agent-generation", "orchestration", "meta-skill"],
+    location: "~/.claude/skills/auto-agent/",
+  },
 ];
