@@ -11,10 +11,11 @@ export type LinkCategory =
   | "Claude Skills & Plugins";
 
 export type LinkScope = "work" | "personal";
+export type LinkType = "tweet" | "github" | "article" | "agent" | "skill";
 
 export interface LinkEntry {
   id: string;
-  type: "tweet" | "github";
+  type: LinkType;
   url: string;
   title: string;
   summary: string;
@@ -25,6 +26,10 @@ export interface LinkEntry {
   hasGithub?: boolean;
   githubUrl?: string;
   stars?: string;
+  tags?: string[];
+  model?: string;
+  toolAccess?: string;
+  location?: string;
 }
 
 export const links: LinkEntry[] = [
@@ -768,5 +773,435 @@ export const links: LinkEntry[] = [
       "Empower non-developers to describe and generate custom tools that solve their unique workflow problems.",
     appIdea:
       "MyToolKit — describe a tool in plain English ('I need something that checks my email every hour and texts me if any email contains the word urgent'), AI builds and deploys it.",
+  },
+
+  // ═══════════════════════════════════════
+  // NEW LINKS (Feb 2026 batch)
+  // ═══════════════════════════════════════
+  {
+    id: "gh-26",
+    type: "github",
+    url: "https://github.com/getmaxun/maxun",
+    title: "Maxun — No-Code Web Scraping",
+    summary:
+      "No-code web data extraction platform with AI-powered structuring. Visual workflow builder with scheduled runs and structured JSON output.",
+    category: "Data & Analytics",
+    scope: "work",
+    useCase:
+      "Automate data collection from competitor sites, job boards, or product listings without writing scrapers from scratch.",
+    appIdea:
+      "PriceRadar — set up visual scrapers for 10 competitor product pages, auto-detect price changes daily, get Slack alerts when competitors drop prices.",
+    tags: ["scraping", "no-code", "data-extraction", "automation"],
+  },
+  {
+    id: "gh-27",
+    type: "github",
+    url: "https://github.com/stickerdaniel/linkedin-mcp-server",
+    title: "LinkedIn MCP Server",
+    summary:
+      "MCP server that connects Claude to LinkedIn for profile lookups, connection management, and messaging. Uses unofficial API — study reference only.",
+    category: "CRM & Business",
+    scope: "work",
+    useCase:
+      "Research prospect profiles during outreach, auto-summarize connection bios, draft personalized connection messages.",
+    appIdea:
+      "OutreachCopilot — paste a LinkedIn URL, AI reads the profile, drafts 3 personalized outreach angles based on their recent posts and mutual interests.",
+    tags: ["mcp-server", "linkedin", "crm", "outreach"],
+  },
+  {
+    id: "gh-28",
+    type: "github",
+    url: "https://github.com/HKUDS/AutoAgent",
+    title: "AutoAgent — Zero-Code Multi-Agent",
+    summary:
+      "Framework that auto-designs multi-agent teams from natural language descriptions. Generates agent topologies and assigns tools dynamically.",
+    category: "AI Agents & Automation",
+    scope: "work",
+    useCase:
+      "Study how agent teams can be auto-composed — describe a goal, get a working multi-agent system without manual wiring.",
+    appIdea:
+      "AgentForge — describe a business process in plain English, AI generates a multi-agent team with roles, tools, and communication patterns. One-click deploy.",
+    tags: ["multi-agent", "zero-code", "agent-design", "automation"],
+  },
+  {
+    id: "art-1",
+    type: "article",
+    url: "https://nervegna.substack.com/p/claude-code-for-designers-a-practical",
+    title: "Claude Code for Designers — Guide",
+    summary:
+      "Practical guide for designers using Claude Code. Covers prompt patterns for UI/UX work, component generation workflows, and design system enforcement techniques.",
+    category: "Developer Tools",
+    scope: "work",
+    useCase:
+      "Improve design-expert agent prompts using proven patterns from the designer community. Better UI output quality.",
+    appIdea:
+      "DesignPromptLib — a curated library of Claude Code prompts specifically for design tasks. Community-contributed, tagged by output type (component, layout, animation, responsive).",
+    tags: ["claude-code", "design", "prompts", "guide"],
+  },
+  {
+    id: "gh-29",
+    type: "github",
+    url: "https://github.com/thisisnsh/aithing",
+    title: "AIThing — Privacy-First Desktop AI",
+    summary:
+      "Privacy-first desktop AI automation for macOS. Runs entirely locally with no cloud dependency — your data never leaves your machine.",
+    category: "AI Agents & Automation",
+    scope: "personal",
+    useCase:
+      "Run AI automation tasks locally for sensitive work — document processing, email drafting, file organization — without data leaving your machine.",
+    appIdea:
+      "LocalOps — a macOS menubar app that chains local AI actions: 'every morning, summarize new emails, organize Downloads folder, draft today's todo from calendar.'",
+    tags: ["privacy", "local-ai", "macos", "automation"],
+  },
+  {
+    id: "gh-30",
+    type: "github",
+    url: "https://github.com/decodingai-magazine/second-brain-ai-assistant-course/",
+    title: "Second Brain AI Assistant Course",
+    summary:
+      "Full course on building a RAG + LLM second-brain assistant. Covers vector stores, retrieval pipelines, memory patterns, and conversational AI.",
+    category: "AI Agents & Automation",
+    scope: "work",
+    useCase:
+      "Learn RAG architecture patterns to improve self-improvement skill memory, build better knowledge retrieval for advisor agents.",
+    appIdea:
+      "BrainVault — personal knowledge base that auto-ingests your notes, bookmarks, and highlights. Ask it anything and get answers grounded in YOUR data with source links.",
+    tags: ["rag", "llm", "vector-store", "memory", "course"],
+  },
+  {
+    id: "gh-31",
+    type: "github",
+    url: "https://github.com/komal-SkyNET/claude-skill-homeassistant",
+    title: "Claude Skill — Home Assistant",
+    summary:
+      "Claude Code skill that integrates with Home Assistant for smart home control. Pattern reference for wrapping external REST APIs as skills.",
+    category: "Claude Skills & Plugins",
+    scope: "personal",
+    useCase:
+      "Study skill authoring patterns — how to wrap an external API as a Claude Code skill with proper error handling and auth.",
+    appIdea:
+      "SkillSmith — a generator that takes any REST API spec (OpenAPI/Swagger) and auto-creates a Claude Code skill with proper auth, error handling, and usage examples.",
+    tags: ["claude-skill", "home-assistant", "iot", "rest-api"],
+  },
+  {
+    id: "gh-32",
+    type: "github",
+    url: "https://github.com/OpnForm/OpnForm",
+    title: "OpnForm — Open-Source Form Builder",
+    summary:
+      "Open-source Typeform alternative with AI form generation, custom domains, webhooks, and conditional logic. AGPL-3.0 license.",
+    category: "Developer Tools",
+    scope: "work",
+    useCase:
+      "Self-hostable form backend as Formspree alternative. Study form UI patterns for contact pages across all projects.",
+    appIdea:
+      "FormFlow — AI-powered form builder that watches user behavior mid-form and adapts questions in real-time. Skip irrelevant fields, expand on interesting answers.",
+    tags: ["forms", "open-source", "typeform-alternative", "webhooks"],
+  },
+  {
+    id: "gh-33",
+    type: "github",
+    url: "https://github.com/ucbepic/docetl",
+    title: "DocETL — LLM-Powered Document ETL",
+    summary:
+      "Berkeley research project for LLM-powered ETL on unstructured documents. Pipeline: ingest → chunk → LLM extract → structured output.",
+    category: "Data & Analytics",
+    scope: "work",
+    useCase:
+      "Process tax documents (sovos), call transcripts (signalroom), interview transcripts into structured data without custom parsers.",
+    appIdea:
+      "DocPipe — drag-and-drop document processing pipeline builder. Connect sources (email, Drive, Dropbox) → define extraction rules in plain English → get structured data in any format.",
+    tags: ["etl", "document-processing", "llm", "berkeley"],
+  },
+  {
+    id: "gh-34",
+    type: "github",
+    url: "https://github.com/browser-use/macOS-use",
+    title: "macOS-use — AI Agent for Desktop",
+    summary:
+      "AI agent that controls macOS native apps beyond the browser. Uses accessibility APIs to interact with Finder, Notes, Calendar, Terminal.",
+    category: "AI Agents & Automation",
+    scope: "work",
+    useCase:
+      "Desktop automation beyond browser — organize files, manage calendar events, control terminal sessions with natural language.",
+    appIdea:
+      "DeskBot — 'open my last 3 Sketch files, export all artboards as PNG, upload to our Figma project, and send the team a Slack message with the link.'",
+    tags: ["macos", "desktop-automation", "accessibility-api", "native-apps"],
+  },
+
+  // ═══════════════════════════════════════
+  // AGENTS
+  // ═══════════════════════════════════════
+  {
+    id: "agent-1",
+    type: "agent",
+    url: "https://github.com/MithunXcpu",
+    title: "design-expert — Dark UI Specialist",
+    summary:
+      "Sonnet-powered agent for dark-themed, data-dense interfaces. Follows token system strictly, runs squint + swap tests, Tailwind v4 compliant.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase:
+      "Spawn for any UI work — dashboard layouts, component design, dark theme implementation, responsive design, accessibility checks.",
+    appIdea:
+      "Auto-spawn when any project needs UI changes. Pair with qa-agent for design review.",
+    tags: ["ui-design", "dark-theme", "tailwind-v4", "accessibility", "responsive"],
+    model: "sonnet",
+    toolAccess: "full",
+    location: "~/.claude/agents/design-expert.md",
+  },
+  {
+    id: "agent-2",
+    type: "agent",
+    url: "https://github.com/MithunXcpu",
+    title: "qa-agent — Read-Only Auditor",
+    summary:
+      "Haiku-powered read-only auditor. Checks build errors, security issues, accessibility gaps, code smells. Never modifies code — report only.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase:
+      "Run before deploys, after feature work, or periodically. Catches issues without touching code.",
+    appIdea:
+      "Auto-run on every commit as a pre-push gate. Blocks deploy if critical issues found.",
+    tags: ["quality-assurance", "security", "accessibility", "build-validation"],
+    model: "haiku",
+    toolAccess: "read-only",
+    location: "~/.claude/agents/qa-agent.md",
+  },
+  {
+    id: "agent-3",
+    type: "agent",
+    url: "https://github.com/MithunXcpu",
+    title: "content-writer — Blog Writer",
+    summary:
+      "Sonnet-powered blog writer with self-critique loop. Voice: direct, slightly irreverent, technically precise. 3 quality gates: shareable? new? unpredictable?",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase:
+      "Generate derivative takes from source material (podcasts, articles, transcripts). Powers the blog automation pipeline.",
+    appIdea:
+      "Weekly auto-publish: transcript → derivative take → self-critique → commit. Already partially implemented via GitHub Actions.",
+    tags: ["content", "blog", "writing", "derivative-takes", "voice"],
+    model: "sonnet",
+    toolAccess: "full",
+    location: "~/.claude/agents/content-writer.md",
+  },
+  {
+    id: "agent-4",
+    type: "agent",
+    url: "https://github.com/MithunXcpu",
+    title: "orchestrator — Supervisor Agent",
+    summary:
+      "Sonnet-powered supervisor that breaks complex tasks into subtasks and routes them to specialized agents. Coordinates parallel execution.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase:
+      "Complex multi-step workflows: break task → spawn agents in parallel → collect results → merge. 18x speedup pattern.",
+    appIdea:
+      "Default entry point for ambitious tasks. 'Build feature X' → orchestrator decomposes, routes, collects.",
+    tags: ["orchestration", "multi-agent", "workflow", "parallel-execution"],
+    model: "sonnet",
+    toolAccess: "full",
+    location: "~/.claude/agents/orchestrator.md",
+  },
+
+  // ═══════════════════════════════════════
+  // SKILLS
+  // ═══════════════════════════════════════
+  {
+    id: "skill-1",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "self-improvement",
+    summary:
+      "Reflects on completed tasks, captures learnings, and evolves project rules. Writes to learnings.md, promotes patterns to CLAUDE.md after 3 occurrences.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Run after significant work to build institutional memory. Prevents repeating mistakes.",
+    appIdea: "Auto-fire after every commit. Continuous learning loop.",
+    tags: ["reflection", "learning", "memory", "continuous-improvement"],
+    location: "~/.claude/skills/self-improvement/",
+  },
+  {
+    id: "skill-2",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "dark-design-system",
+    summary:
+      "Token system, Tailwind v4 rules, component blueprints, per-project accent colors. Enforces surface/text hierarchy across all projects.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Use when building any UI component or page. Ensures visual consistency.",
+    appIdea: "Foundation for design-expert agent. Every UI decision routes through these tokens.",
+    tags: ["design-system", "tokens", "tailwind-v4", "dark-theme"],
+    location: "~/.claude/skills/dark-design-system/",
+  },
+  {
+    id: "skill-3",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "scaffold",
+    summary:
+      "Generate standard Next.js project with dark theme, Tailwind v4, all common deps, CLAUDE.md, contact page, and git init in one shot.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Starting any new project. One command → full project structure.",
+    appIdea: "Feed scout picks directly to scaffold for auto-project creation.",
+    tags: ["project-setup", "next-js", "boilerplate", "automation"],
+    location: "~/.claude/skills/scaffold/",
+  },
+  {
+    id: "skill-4",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "blog-generator",
+    summary:
+      "Derivative takes from source material with self-critique loop. Research → find angle → draft → critique (shareable? new? unpredictable?) → rewrite.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Creating blog posts from topics, transcripts, or articles.",
+    appIdea: "Powers content-writer agent. Input: any source → Output: publishable markdown.",
+    tags: ["blog", "content-generation", "self-critique", "markdown"],
+    location: "~/.claude/skills/blog-generator/",
+  },
+  {
+    id: "skill-5",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "security-audit",
+    summary:
+      "Scan for exposed API keys, missing security configs, and dependency vulnerabilities. Read-only — never modifies files.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Before deploy, periodically, after adding new integrations.",
+    appIdea: "Auto-run in CI pipeline. Block deploy on critical findings.",
+    tags: ["security", "audit", "secrets", "dependencies", "read-only"],
+    location: "~/.claude/skills/security-audit/",
+  },
+  {
+    id: "skill-6",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "code-review",
+    summary:
+      "Review code for architecture, performance, accessibility, TypeScript quality, and Tailwind v4 compliance. Produces actionable feedback.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "After implementing features, during PR review.",
+    appIdea: "Automated PR reviewer. Comment on every PR with structured feedback.",
+    tags: ["code-review", "architecture", "performance", "accessibility", "typescript"],
+    location: "~/.claude/skills/code-review/",
+  },
+  {
+    id: "skill-7",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "quality-gate",
+    summary:
+      "Pre-commit quality checks: TypeScript errors (tsc --noEmit), console.log detection, hardcoded secret patterns, TODO flags.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Run before any git commit. Catches common mistakes.",
+    appIdea: "Git pre-commit hook. Zero bad code gets committed.",
+    tags: ["pre-commit", "typescript", "linting", "secrets-detection"],
+    location: "~/.claude/skills/quality-gate/",
+  },
+  {
+    id: "skill-8",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "session-context",
+    summary:
+      "Hook that auto-loads project CLAUDE.md and learnings.md on session start, resume, and compact. Provides persistent context across conversations.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Always active. Ensures Claude never loses project context.",
+    appIdea: "Foundation for continuous memory. Every session starts with full project awareness.",
+    tags: ["context", "hooks", "memory", "session-management"],
+    location: "~/.claude/skills/session-context/",
+  },
+  {
+    id: "skill-9",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "advisor",
+    summary:
+      "Build callable AI advisors from source material (books, transcripts, interviews). Each advisor scores your work against a thinker's frameworks.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Create domain-specific advisors that evaluate work through specific lenses.",
+    appIdea: "Library of advisors: YC advisor, design advisor, marketing advisor. Each from real source material.",
+    tags: ["advisor", "evaluation", "frameworks", "source-material"],
+    location: "~/.claude/skills/advisor/",
+  },
+  {
+    id: "skill-10",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "ui-upgrade",
+    summary:
+      "Premium landing page redesign: reads existing code, preserves functionality, applies scroll animations, gradient text, stats bars, and feature grids.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Upgrade any project's landing page to premium dark-themed design.",
+    appIdea: "One-command visual upgrade. 'Make this look premium' → done.",
+    tags: ["ui-upgrade", "landing-page", "animations", "premium-design"],
+    location: "~/.claude/skills/ui-upgrade/",
+  },
+  {
+    id: "skill-11",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "deploy",
+    summary:
+      "One-shot build → commit → push → Vercel deploy. Handles git operations, build verification, and production deployment in one command.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Ship any project. Build, commit, push, deploy — one command.",
+    appIdea: "The final step in every pipeline. Quality-gate → deploy.",
+    tags: ["deploy", "vercel", "git", "ci-cd", "one-shot"],
+    location: "~/.claude/skills/deploy/",
+  },
+  {
+    id: "skill-12",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "yt2md",
+    summary:
+      "Extract YouTube video transcripts as structured markdown. Handles timestamps, speaker detection, and section splitting.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Content pipeline input. YouTube video → structured markdown → blog-generator.",
+    appIdea: "Auto-extract transcripts from podcast RSS feeds. Feed to content-writer weekly.",
+    tags: ["youtube", "transcripts", "markdown", "content-pipeline"],
+    location: "~/.claude/skills/yt2md/",
+  },
+  {
+    id: "skill-13",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "multi-machine-setup",
+    summary:
+      "Guide for setting up multi-machine AI orchestration with OpenClaw, Ollama, and Mission Control across multiple Macs.",
+    category: "Claude Skills & Plugins",
+    scope: "personal",
+    useCase: "Reference when laptops arrive. Multi-Mac AI cluster setup.",
+    appIdea: "Distributed AI workloads across home lab.",
+    tags: ["multi-machine", "ollama", "openclaw", "macos"],
+    location: "~/.claude/skills/multi-machine-setup/",
+  },
+  {
+    id: "skill-14",
+    type: "skill",
+    url: "https://github.com/MithunXcpu",
+    title: "product-ads",
+    summary:
+      "Generate AI product photography prompts and ad creatives using Nano Banana Pro (Gemini) or Flux. Creates 5-image Google Shopping ad sets.",
+    category: "Claude Skills & Plugins",
+    scope: "work",
+    useCase: "Product photography without a photographer. Description → 5 ad-ready images.",
+    appIdea: "E-commerce integration: connect Shopify, auto-generate product photos for every listing.",
+    tags: ["product-photography", "ai-images", "ads", "e-commerce"],
+    location: "~/.claude/skills/product-ads/",
   },
 ];
